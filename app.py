@@ -12,7 +12,8 @@ import tkinter as tk
 from tkinter import ttk
 from frames import OvenSeparate, Oscilloscope, Sample #,Laser
 from communication.pico9000 import CommunicationPicoscope
-#from communication.laser import CommunicationLaser
+from communication.laser import CommunicationLaser
+from communication.oven import CommunicationOven
 
 COLOR_LIGHT_BACKGROUND = "#D3E2F1"
 COLOR_DARK_BACKGROUND = "#2e3f4f"
@@ -39,7 +40,7 @@ class RepeatedFlashExperiment(tk.Tk):
         container.rowconfigure((0,1), weight=1)
         container.columnconfigure((0,1), weight=1)
         
-        
+        self.communication_oven = CommunicationOven(self)
         oven_frame = OvenSeparate(container, self)   
         oven_frame.grid(row=0, column=0)
         
@@ -60,6 +61,13 @@ class RepeatedFlashExperiment(tk.Tk):
             child.grid_configure(padx=5, pady=5, sticky="NSEW")
             child["style"]='Frame.TFrame'
             child["padding"]=10
+            
+        self.protocol('WM_DELETE_WINDOW',  self.close_window)
+        
+    def close_window(self):
+        self.communication_oven.arduino_I2C.close()
+        
+        self.destroy()
    
     
    

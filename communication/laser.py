@@ -57,6 +57,9 @@ class CommunicationLaser(threading.Thread):
         print("self.real_state = ",  self.serial_laser.readline() )
 #        
         pass
+#    def switch_light (self):   
+#        if :
+#        else =
         
 class ApplicationLaser(threading.Thread):
     

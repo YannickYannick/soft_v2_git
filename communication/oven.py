@@ -151,12 +151,13 @@ class CommunicationOven(threading.Thread):
             if len(self.list_temp_maximum_palier)>100 : 
                 self.list_temp_maximum_palier = self.list_temp_maximum_palier[-100:]
             # partie proportionnel
+            print(self.order_temperature)
             self.erreur = self.order_temperature - self.real_temperature
             self.proportional_error = self.erreur
             
              # partie proportionnel
             self.erreur = self.order_temperature - self.real_temperature
-            self.proportionnel = self.proportional_coeff * self.proportional_error   #
+            self.proportionnel = 2 * self.proportional_error   # (y->y)self.proportional_coeff * self.proportional_error   #
             
             if self.proportionnel > 125 :
                 self.proportionnel = 125 
@@ -206,7 +207,9 @@ class CommunicationOven(threading.Thread):
             #self.integral = self.intergral_coeff * self.integral_error                 # to delete
                                   #
             
-            self.output = self.proportionnel + self.integral + self.derive
+            self.output = self.proportionnel# + self.integral + self.derive
+            
+            print ("self.output", self.output)
             
           
             self.erreur_moins_un = self.erreur
@@ -254,7 +257,7 @@ class CommunicationOven(threading.Thread):
                 self.timer  = self.timer_fixe 
             
             self.real_temperaturee = self.real_temperature   
-            time.sleep(0.1)
+            time.sleep(0.5)
  
     
     

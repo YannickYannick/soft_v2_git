@@ -53,7 +53,7 @@ class OvenSeparate(ttk.Frame):
         self.manual_bot_container = ManualTemperature(sub_container)
         self.manual_bot_container.grid(row=1, column=0)
         
-        self.auto_bot_container= AutoTemperature(sub_container,left_container)
+        self.auto_bot_container= AutoTemperature(sub_container,left_container, self)
         self.auto_bot_container.grid(row=1, column=0)
         
         self.select_advice = SelectAdvice(sub_container)
@@ -84,9 +84,9 @@ class OvenSeparate(ttk.Frame):
         frame.tkraise()
         
     def next_temperature(self, bot) :
-        # self.main_app.communication_oven.temperature_iterator += 1
-        # self.main_app.communication_oven.next_temperature()
-        # print ("order",self.main_app.communication_oven.order_temperature)
+        self.main_app.communication_oven.temperature_iterator += 1
+        self.main_app.communication_oven.next_temperature()
+        print ("order",self.main_app.communication_oven.order_temperature)
         bot.next_()
 
  
@@ -96,7 +96,7 @@ class LeftContainer(ttk.Frame):
     def __init__(self, container, show_manual, show_auto, oven_frame,
                  **kwargs):
         super().__init__(container, **kwargs)
-        
+        self.oven_frame = oven_frame
         self.show_manual = show_manual
         self.show_auto = show_auto
         
@@ -121,7 +121,7 @@ class LeftContainer(ttk.Frame):
         )
         self.gauge.grid(column=0, row=0) 
         self.gauge.set_value(0)
-        #self.update_temperature()
+        self.update_temperature()
         
         
         selection_temp_container= ttk.LabelFrame(self,
@@ -270,11 +270,11 @@ class LeftContainer(ttk.Frame):
         self.temperature_min['state']='disabled'
         
         
-    # def update_temperature(self):
-    #     comm_device = self.oven_frame.main_app.communication_oven
-    #     temperature = comm_device.real_temperaturee*10
-    #     self.gauge.set_value(float(temperature)) 
-    #     self._timer_decrement_job1 = self.after(1000, self.update_temperature)
+    def update_temperature(self):
+        comm_device = self.oven_frame.main_app.communication_oven
+        temperature = comm_device.real_temperaturee*10
+        self.gauge.set_value(float(temperature)) 
+        self._timer_decrement_job1 = self.after(1000, self.update_temperature)
 
   
       
@@ -542,8 +542,9 @@ class ManualTemperature(ttk.LabelFrame):
             
 class AutoTemperature(ttk.LabelFrame):
     
-    def __init__(self, parent, controller, **kwargs):       
+    def __init__(self, parent, controller, oven_frame, **kwargs):       
         super().__init__(parent,**kwargs)
+        self.oven_frame = oven_frame
         
         self.columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12), weight=1)
         
@@ -602,6 +603,10 @@ class AutoTemperature(ttk.LabelFrame):
                 (((int(temperature_max)-int(temperature_min))/
                   (int(number_point)-1))*i))
             self.temperature_value[i].set(f"{temperature[i]}")
+            
+        self.oven_frame.main_app.communication_oven.list_temperatures_ordered = f"{temperature}"
+        self.oven_frame.main_app.communication_oven.update_temperatures()            
+        
      
             
     def clear(self):

@@ -66,46 +66,6 @@ class Oscilloscope(ttk.Frame):
             #child["padding"]=10
         
 
-# class LivePlotting(tk.Frame):
-#     def __init__(self, parent, application, **kwargs):
-#         tk.Frame.__init__(self, parent, width=768, height=576, bg='red', **kwargs)
-#         self.pack(fill=tk.BOTH)
-        
-#         self.application = application
-
-#         self.graph = plt.Figure(figsize=(5,4), dpi=200)
-        
-
-#         self.line = self.graph.add_subplot(1,1,1)
-        
-        
-#         self.axe_x = range(5)
-#         #self.axe_x = range(512)       
-#         self.axe_y = range(512)
-        
-#         self.iterator = 0
-        
-#         self.canvas = FigureCanvasTkAgg(self.graph, master=self)
-#         self.canvas.get_tk_widget().pack(fill=tk.BOTH)
-        
-        
-#         self.start()
-        
-#     def update(self, i):
-#         self.iterator += 1
-#         self.line.clear()
-    
-#         self.axe_y = self.application.communication_picoscope.data
-        
-#         self.line.plot(self.axe_x, self.axe_y, label='consigne', color='green' )
-        
-        
-        
-#         # Format plot
-        
-#     def start(self):
-#         self.graph.ani = animation.FuncAnimation(self, self.update, interval=100)
-#         plt.show()
 class LeftContainer(ttk.Frame):
     def __init__(self, container, controller, **kwargs):
         super().__init__(container,**kwargs)
@@ -126,6 +86,7 @@ class LeftContainer(ttk.Frame):
         self.fig.ani = animation.FuncAnimation(self.fig, self.get_data, interval=100)
         
     def get_data(self, *args):
+        self.fig.add_subplot(111).clear()
         x = range(512)
         y = self.controller.main_frame.communication_picoscope.data
         self.fig.add_subplot(111).plot(x, y)
@@ -227,7 +188,7 @@ class RightContainer(ttk.Frame):
         average_scale.grid(row=4, column=0)
         average_scale.bind('<Motion>',self.motion_in_scale)
         
-        self.reglage_1 = self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"] # est-ce que c'est utile ?
+#        self.reglage_1 = self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"] 
        
         for child in spinbox_container.winfo_children():
             child.grid_configure(padx=5, pady=5,
@@ -250,6 +211,6 @@ class RightContainer(ttk.Frame):
         received_time_scale = self.time_scale_value.get()
         self.update_val  = 1
         self.controller.main_frame.communication_picoscope.picoscope_properties["self.time_scale"]=received_time_scale #passer la commande à comm Oscillo
-        self.CommunicationPicoscope()  # est-ce que c'est utile ?
+
         
         
