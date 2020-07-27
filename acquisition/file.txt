@@ -1,0 +1,28 @@
+operator : 
+date : 2020-07-26 
+--------------- Oven ---------------
+rise rate : 
+accuracy : 
+annealing time : 
+entry mode : 
+min. temperature : 
+max.temperature : 
+number of point : 
+target temperature : 
+----------- Oscilloscope -----------
+selected picoscope : 
+time scale : 
+average : 
+--------------- Laser ---------------
+mode : 
+repetition rate : 
+pulse : 
+frequency : 
+magnitude : 
+----------- Sample Parameters -----------
+material : 
+sample name : 
+sample width : 
+ 
+ 
+time ; consigne ; temperature ; puissance ; repetition rate ; pulse rate ; frequency ; magnitude ; y  

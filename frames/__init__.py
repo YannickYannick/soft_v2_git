@@ -10,7 +10,6 @@ repeated flash experiment (Oven, Oscilloscope, Laser, Sample)
 """
 
 from frames.oven import Oven
-from frames.oven_separate_classes import OvenSeparate
 from frames.oscilloscope import Oscilloscope
 from frames.laser import Laser
 from frames.sample import Sample

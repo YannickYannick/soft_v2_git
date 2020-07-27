@@ -20,7 +20,8 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
-from communication.pico9000 import CommunicationPicoscope
+
+#from communication.pico9000 import CommunicationPicoscope
 
 
 import numpy as np
@@ -56,8 +57,8 @@ class Oscilloscope(ttk.Frame):
         left_container.grid(row=0, column=0)
         
         
-        right_container = RightContainer(sub_container, self)
-        right_container.grid(row=0, column=1)
+        self.right_container = RightContainer(sub_container, self)
+        self.right_container.grid(row=0, column=1)
 
         
         for child in sub_container.winfo_children():
@@ -75,7 +76,10 @@ class LeftContainer(ttk.Frame):
         
         self.controller = controller
         
-        self.fig = Figure(figsize=(6, 4), dpi=100)
+        height = 1.5 * 2
+        width = 1.5 * 3
+        
+        self.fig = Figure(figsize=(width, height), dpi=100)
 
         
         
@@ -88,8 +92,10 @@ class LeftContainer(ttk.Frame):
     def get_data(self, *args):
         self.fig.add_subplot(111).clear()
         x = range(512)
-        y = self.controller.main_frame.communication_picoscope.data
+        y = range(512)
+        #y = self.controller.main_frame.communication_picoscope.data
         self.fig.add_subplot(111).plot(x, y)
+        return y 
         
         
         
@@ -117,11 +123,11 @@ class RightContainer(ttk.Frame):
         dialogue_box.grid(row=0, column=0)
         
         
-        oscilloscope_selection = tk.StringVar()
+        self.oscilloscope_selection = tk.StringVar()
         oscillo1 = ttk.Radiobutton(
             self, 
             text="Picoscope 2204A", 
-            variable=oscilloscope_selection, 
+            variable=self.oscilloscope_selection, 
             value="pico1",
             style="Radiobutton.TRadiobutton"
         )
@@ -130,7 +136,7 @@ class RightContainer(ttk.Frame):
         oscillo2 = ttk.Radiobutton(
             self, 
             text="Picoscope 9000", 
-            variable=oscilloscope_selection, 
+            variable=self.oscilloscope_selection, 
             value="pico2",
             style="Radiobutton.TRadiobutton"
         )
@@ -198,19 +204,26 @@ class RightContainer(ttk.Frame):
         for child in self.winfo_children():
             child.grid_configure(padx=5, pady=5,
                                  sticky="NSEW")
-
+            
+        self.data = []
         
     def motion_in_scale(self,event):
         if self.average_state.get() == 1 :
             received_average = self.average_value.get()
             self.average_value_str.set(str(received_average))
-            self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"]=received_average
+            #self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"]=received_average
      
         
     def entry_in_timespinbox(self,event):
         received_time_scale = self.time_scale_value.get()
         self.update_val  = 1
-        self.controller.main_frame.communication_picoscope.picoscope_properties["self.time_scale"]=received_time_scale #passer la commande à comm Oscillo
+        #self.controller.main_frame.communication_picoscope.picoscope_properties["self.time_scale"]=received_time_scale #passer la commande à comm Oscillo
 
-        
+
+    def get_data(self):
+        self.data = [self.average_value.get(),
+                     self.time_scale_value.get(),
+                     self.oscilloscope_selection.get()
+                     ]
+        return self.data
         

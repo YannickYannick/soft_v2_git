@@ -1,0 +1,41 @@
+operator : SDFGHJK 
+date : 2020-07-27 
+--------------- Oven ---------------
+rise rate (C°/min): 234567
+accuracy (°C): 234567 
+annealing time (s) : 34567
+entry mode : linear
+min. temperature (°C): 0
+max.temperature (°C): 200 
+number of point : 12
+target temperatures (°C): 
+----------- Oscilloscope -----------
+selected picoscope : 
+time scale (ns/DIV): FGHJ
+number of averages : 5151 
+--------------- Laser ---------------
+mode : QSDFGH
+repetition rate : SDFGHJ 
+pulse (kHz) : XCVBN? 
+frequency (kHz) : SDFGHJ 
+magnitude (%) : DFGHJ 
+----------- Sample Parameters -----------
+material : XFGHJ 
+sample name : YUIO 
+sample width (mm): FGHJK 
+ 
+ 
+time ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+1 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+2 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+3 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+4 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+5 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+6 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+7 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+8 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+9 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+10 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+11 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+12 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
+13 ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  
