@@ -40,8 +40,8 @@ class Laser(ttk.Frame):
         sub_container.columnconfigure((0,1), weight=1)
         
         
-        left_container = LeftContainer(sub_container)
-        left_container.grid(row=0, column=0)
+        self.left_container = LeftContainer(sub_container)
+        self.left_container.grid(row=0, column=0)
         
         
         right_container = RightContainer(sub_container, self)
@@ -66,46 +66,46 @@ class LeftContainer(ttk.Frame):
         mode_label = ttk.Label(self, text="Mode : ")
         mode_label.grid(row=0, column=0)
         mode_value = tk.StringVar()
-        mode = ttk.Combobox(self, 
+        self.mode = ttk.Combobox(self, 
                             textvariable=mode_value)
-        mode["values"] = ("Burst", "Continued")
-        mode.grid(row=0, column=1)
+        self.mode["values"] = ("Burst", "Continued")
+        self.mode.grid(row=0, column=1)
         
         
         repetition_rate_label = ttk.Label(self, text="Répétition Rate : ")
         repetition_rate_label.grid(row=1, column=0)
         self.repetition_rate_value = tk.StringVar()
-        repetition_rate = ttk.Combobox(self, 
+        self.repetition_rate = ttk.Combobox(self, 
                                       textvariable=self.repetition_rate_value)
-        repetition_rate["values"] = ("0", "1000","15000","20000","30000",)
-        repetition_rate.grid(row=1, column=1)
+        self.repetition_rate["values"] = ("0", "1000","15000","20000","30000",)
+        self.repetition_rate.grid(row=1, column=1)
         
         
-        burst_label = ttk.Label(self, text="Burst Rate (kHz): ")
-        burst_label.grid(row=2, column=0)
-        burst_value = tk.StringVar()
+        self.burst_label = ttk.Label(self, text="Burst Rate (kHz): ")
+        self.burst_label.grid(row=2, column=0)
+        self.burst_value = tk.StringVar()
         self.burst = ttk.Combobox(self, 
-                             textvariable=burst_value)
+                             textvariable=self.burst_value)
         self.burst["values"] = ("0", "100", "200", "400", "800", "16700000")
         self.burst.grid(row=2, column=1)
         
         
-        frequency_label = ttk.Label(self, text="Frequency (kHz): ")
-        frequency_label.grid(row=3, column=0)
-        frequency_value = tk.StringVar()
-        frequency = ttk.Combobox(self, 
-                                 textvariable=frequency_value)
-        frequency["values"] = ("0", "3", "7", "10")
-        frequency.grid(row=3, column=1)
+        self.frequency_label = ttk.Label(self, text="Frequency (kHz): ")
+        self.frequency_label.grid(row=3, column=0)
+        self.frequency_value = tk.StringVar()
+        self.frequency = ttk.Combobox(self, 
+                                 textvariable=self.frequency_value)
+        self.frequency["values"] = ("0", "3", "7", "10")
+        self.frequency.grid(row=3, column=1)
         
         
-        magnitude_label = ttk.Label(self, text="Magnitude (%): ")
-        magnitude_label.grid(row=4, column=0)
-        magnitude_value = tk.StringVar()
-        magnitude = ttk.Combobox(self, 
-                                 textvariable=magnitude_value)
-        magnitude["values"] = ("0", "20", "50", "70", "100")
-        magnitude.grid(row=4, column=1)
+        self.magnitude_label = ttk.Label(self, text="Magnitude (%): ")
+        self.magnitude_label.grid(row=4, column=0)
+        self.magnitude_value = tk.StringVar()
+        self.magnitude = ttk.Combobox(self, 
+                                 textvariable=self.magnitude_value)
+        self.magnitude["values"] = ("0", "20", "50", "70", "100")
+        self.magnitude.grid(row=4, column=1)
         
         
         for child in self.winfo_children():
@@ -159,14 +159,19 @@ class RightContainer(ttk.Frame):
         play_button = ttk.Button(self, 
                                  text="Play", 
                                  padding=10, 
-                                 style="Button.TButton"
+                                 style="Button.TButton",
+                                 command = self.on_off_laser
                                  )
         play_button.grid(row=2, column=0)
         
         
         print(self.laser_properties)
+    def on_off_laser(self):
+        self.laser_frame.main_app.communication_laser.laser_switch_light()
+        
+        
     def mode(self, i): # peut-être interessant si on veut utiliser les 9 modes du laser (y->m)
-        switcher={"Burst":'4', "Continued":'1'}
+        switcher={"Burst":'4', "Continued":'5'}
         return switcher.get(i,"Invalid day of week")
     
     def validate(self): # Bouton gris tant que tous les champs ne sont pas remplis (y->m)
@@ -177,7 +182,7 @@ class RightContainer(ttk.Frame):
         self.laser_properties["self.state"] = self.laser_frame.main_app.communication_laser.laser_properties["self.state"]
         self.laser_properties["self.mode"] = self.state
         self.laser_properties["self.current_mode"] = 0 # voir si ce mode est compatible avec burst et continuous (y->y)
-        self.laser_properties["self.pulse_rate"] = self.laser_frame.left_container.pulse.get() 
+        #self.laser_properties["self.pulse_rate"] = self.laser_frame.left_container.pulse.get() 
         self.aa = self.laser_frame.left_container.repetition_rate.get() 
         self.laser_properties["self.burst_rate"] = self.laser_frame.left_container.burst.get() 
         self.aa = self.laser_frame.left_container.repetition_rate_value.get() 

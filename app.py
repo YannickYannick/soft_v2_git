@@ -10,8 +10,8 @@ Main tk window for the repeated flash experiment GUI
 
 import tkinter as tk
 from tkinter import ttk
-from frames import OvenSeparate, Oscilloscope, Sample #,Laser
-from communication.pico9000 import CommunicationPicoscope
+from frames import OvenSeparate, Oscilloscope, Sample ,Laser
+from communication.pico2000 import CommunicationPicoscope
 from communication.laser import CommunicationLaser
 from communication.oven import CommunicationOven
 
@@ -48,9 +48,9 @@ class RepeatedFlashExperiment(tk.Tk):
         oscilloscope_frame = Oscilloscope(container, self)   
         oscilloscope_frame.grid(row=0, column=1)
         
-        # self.communication_laser = CommunicationLaser(self)
-        # laser_frame = Laser(container, self) 
-        # laser_frame.grid(row=1, column=0)
+        self.communication_laser = CommunicationLaser(self)
+        laser_frame = Laser(container, self) 
+        laser_frame.grid(row=1, column=0)
         
         
         sample_frame = Sample(container)  
@@ -66,7 +66,7 @@ class RepeatedFlashExperiment(tk.Tk):
         
     def close_window(self):
         self.communication_oven.arduino_I2C.close()
-        
+        self.communication_laser.serial_laser.close()
         self.destroy()
    
     
