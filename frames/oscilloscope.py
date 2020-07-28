@@ -20,8 +20,7 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
-
-#from communication.pico9000 import CommunicationPicoscope
+from communication.pico9000 import CommunicationPicoscope
 
 
 import numpy as np
@@ -78,7 +77,7 @@ class LeftContainer(ttk.Frame):
         
         height = 1.5 * 2
         width = 1.5 * 3
-        
+
         self.fig = Figure(figsize=(width, height), dpi=100)
 
         
@@ -92,8 +91,7 @@ class LeftContainer(ttk.Frame):
     def get_data(self, *args):
         self.fig.add_subplot(111).clear()
         x = range(512)
-        y = range(512)
-        #y = self.controller.main_frame.communication_picoscope.data
+        y = self.controller.main_frame.communication_picoscope.data
         self.fig.add_subplot(111).plot(x, y)
         return y 
         
@@ -129,8 +127,9 @@ class RightContainer(ttk.Frame):
             text="Picoscope 2204A", 
             variable=self.oscilloscope_selection, 
             value="pico1",
-            style="Radiobutton.TRadiobutton"
-        )
+            style="Radiobutton.TRadiobutton",
+            command = self.picoscope_2000)
+
         oscillo1.grid(column=0, row=1)
         
         oscillo2 = ttk.Radiobutton(
@@ -138,8 +137,9 @@ class RightContainer(ttk.Frame):
             text="Picoscope 9000", 
             variable=self.oscilloscope_selection, 
             value="pico2",
-            style="Radiobutton.TRadiobutton"
-        )
+            style="Radiobutton.TRadiobutton",
+            command = self.picoscope_9000)
+
         oscillo2.grid(column=0, row=2)
         
         
@@ -204,26 +204,33 @@ class RightContainer(ttk.Frame):
         for child in self.winfo_children():
             child.grid_configure(padx=5, pady=5,
                                  sticky="NSEW")
-            
-        self.data = []
+
+    def picoscope_9000(self):
+        print("initializing picoscope_9000")
+        self.controller.main_frame.communication_picoscope.initialisation_picoscope_9001 += 10
+        print("variable = ok")
+        self.controller.main_frame.communication_picoscope.initialisation_picoscope_9000()
         
+    def picoscope_2000(self):
+        print("initializing picoscope_2000")
+        self.controller.main_frame.communication_picoscope.initialisation_picoscope_2000()
+
     def motion_in_scale(self,event):
         if self.average_state.get() == 1 :
             received_average = self.average_value.get()
             self.average_value_str.set(str(received_average))
-            #self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"]=received_average
+            self.controller.main_frame.communication_picoscope.picoscope_properties["self.average"]=received_average
      
         
     def entry_in_timespinbox(self,event):
         received_time_scale = self.time_scale_value.get()
         self.update_val  = 1
-        #self.controller.main_frame.communication_picoscope.picoscope_properties["self.time_scale"]=received_time_scale #passer la commande à comm Oscillo
+        self.controller.main_frame.communication_picoscope.picoscope_properties["self.time_scale"]=received_time_scale #passer la commande à comm Oscillo
 
-
+        
     def get_data(self):
         self.data = [self.average_value.get(),
                      self.time_scale_value.get(),
                      self.oscilloscope_selection.get()
                      ]
         return self.data
-        

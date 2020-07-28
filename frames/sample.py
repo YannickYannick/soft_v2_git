@@ -35,8 +35,8 @@ class Sample(ttk.Frame):
         sub_container.columnconfigure((0,1), weight=1)
         
         
-        self.left_container = LeftContainer(sub_container)
-        self.left_container.grid(row=0, column=0)
+        left_container = LeftContainer(sub_container)
+        left_container.grid(row=0, column=0)
         
         
         right_container = RightContainer(sub_container)
@@ -61,9 +61,9 @@ class LeftContainer(ttk.Frame):
         
         material_label = ttk.Label(self, text="Material : ")
         material_label.grid(row=0, column=0)
-        self.material_value = tk.StringVar()
+        material_value = tk.StringVar()
         material = ttk.Combobox(self, 
-                                textvariable=self.material_value
+                                textvariable=material_value
                                 )
         material["values"] = ("Burst", "Continued")
         material.grid(row=0, column=1)
@@ -71,9 +71,9 @@ class LeftContainer(ttk.Frame):
         
         sample_name_label = ttk.Label(self, text="Sample Name : ")
         sample_name_label.grid(row=1, column=0)
-        self.sample_name_value = tk.StringVar()
+        sample_name_value = tk.StringVar()
         sample_name = ttk.Combobox(self, 
-                                   textvariable=self.sample_name_value
+                                   textvariable=sample_name_value
                                    )
         sample_name["values"] = ("Burst", "Continued")
         sample_name.grid(row=1, column=1)
@@ -81,16 +81,16 @@ class LeftContainer(ttk.Frame):
         
         sample_width_label = ttk.Label(self, text="Sample Width : ")
         sample_width_label.grid(row=2, column=0)
-        self.sample_width_value = tk.StringVar()
+        sample_width_value = tk.StringVar()
         sample_width = ttk.Combobox(self, 
-                                   textvariable=self.sample_width_value
+                                   textvariable=sample_width_value
                                    )
         sample_width["values"] = ("Burst", "Continued")
         sample_width.grid(row=2, column=1)
         
-        self.text_box_value = tk.StringVar()
+        text_box_value = tk.StringVar()
         text_box= ttk.Entry(self, 
-                            textvariable=self.text_box_value)
+                            textvariable=text_box_value)
         text_box.grid(row=3, column=0, columnspan=2, 
                       padx=5, pady=5,
                       sticky="NESW"
@@ -103,16 +103,6 @@ class LeftContainer(ttk.Frame):
             if isinstance(child, tk.ttk.Combobox) == True :
                 child.grid_configure(sticky="EW")
                 #child["style"]='Label.TFrame'
-                
-        self.data = []
-        
-    def get_data(self):
-        self.data = [self.material_value.get(),
-                     self.sample_name_value.get(),
-                     self.sample_width_value.get(),
-                     self.text_box_value.get()
-                     ]
-        return self.data
         
 class RightContainer(ttk.Frame):
     def __init__(self, container, **kwargs):

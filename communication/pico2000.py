@@ -10,7 +10,6 @@ import time
 from picoscope import ps2000
 # from picoscope import ps2000a
 import pylab as plt
-import numpy as np
 import time
 
 #pico9000
@@ -78,33 +77,7 @@ class CommunicationPicoscope(threading.Thread):
         
         print("Attempting to open Picoscope 2000...")
 
-        self.ps = ps2000.PS2000()
-        # Uncomment this line to use with the 2000a/2000b series
-        # ps = ps2000a.PS2000a()
         
-        print("Found the following picoscope:")
-        
-        self.ps.getAllUnitInfo()
-        time.sleep(5)
-        waveform_desired_duration = 10E-6
-        obs_duration = 3 * waveform_desired_duration
-        sampling_interval = obs_duration / 4096
-        
-        (actualSamplingInterval, self.nSamples, maxSamples) = \
-            self.ps.setSamplingInterval(sampling_interval, obs_duration)
-        print("Sampling interval = %f ns" % (actualSamplingInterval * 1E9))
-        print("Taking  samples = %d" % self.nSamples)
-        print("Maximum samples = %d" % maxSamples)
-        
-        # the setChannel command will chose the next largest amplitude
-        channelRange = self.ps.setChannel('A', 'DC', 2.0, 0.0, enabled=True,
-                                     BWLimited=False)
-        print("Chosen channel range = %d" % channelRange)
-        
-        self.ps.setSimpleTrigger('A', 1.0, 'Falling', timeout_ms=100, enabled=True)
-        
-        self.ps.setSigGenBuiltInSimple(offsetVoltage=0, pkToPk=1.2, waveType="Sine",
-                                  frequency=50E3)
         
        
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Created on Thu Jul 16 17:39:00 2020
 
+@author: melinapannier
+"""
 # dans l'entete, à coté du bouton run global, mettre un parametre 
 # pr remplir le nom de fichier et indiquer le chemin de stockage
 #apl la fonction save data qd on clique sur la bouton run global
@@ -13,11 +17,11 @@
 import datetime
 
 def save_data(filename, operator, oven_dat, oscillo_dat, laser_dat, sample_dat):
-    
+
     today_date = datetime.date.today()
-    
+
     backup = open(f"{filename}.txt", "w")
-            
+
     backup.write(f"operator : {operator} \n")
     backup.write(f"date : {today_date} \n")
     backup.write("--------------- Oven ---------------\n")
@@ -43,15 +47,15 @@ def save_data(filename, operator, oven_dat, oscillo_dat, laser_dat, sample_dat):
     backup.write(f"material : {sample_dat[0]} \n")
     backup.write(f"sample name : {sample_dat[1]} \n")
     backup.write(f"sample width (mm): {sample_dat[2]} \n \n \n")
-    
+
     backup.write("time ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  \n")
-    
+
     backup.close()
-    
+
 def save_results(filename, results_data) :
 
     backup = open(f"{filename}.txt", "a")
-    
+
     backup.write(f"{results_data[0]} ; setpoint ; temperature ; power ; repetition rate ; pulse rate ; frequency ; magnitude ; y  \n")
 
-    backup.close()
+    backup.close() 

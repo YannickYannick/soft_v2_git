@@ -9,7 +9,8 @@ import time
 import threading   
 import tkinter as tk
 
-
+import time
+import pyvisa
 
     
 class CommunicationLaser(threading.Thread):
@@ -19,16 +20,19 @@ class CommunicationLaser(threading.Thread):
         self.master = master
         self.new_commands_list = []
         
-#        self.serial_laser = serial.Serial('COM6', baudrate = 9600, 
-#                            bytesize = 8, parity = 'N', stopbits = 1, 
-#                            xonxoff = 0, timeout = 5)
+        self.serial_laser = serial.Serial('COM6', baudrate = 9600, 
+                            bytesize = 8, parity = 'N', stopbits = 1, 
+                            xonxoff = 0, timeout = 5)
+        self.rm = pyvisa.ResourceManager()
+        self.device = self.rm.list_resources()
+        self.inst = self.rm.open_resource(self.device[0])
         
-        self.laser_properties = {"self.state":0, "self.mode":0, "self.current_mode" : 0, "self.burst_rate" : 0, "self.repetition_rate" : 0, "self.burst_rate" : 0, "self.current_intensity_p":0, "self.light":0}
-        self.laser_commands = {"self.state":"STA=", "self.mode":"QM=", "self.current_mode" : "CM=", "self.burst_rate" : "generateur", "self.repetition_rate" : "RR=", "self.burst_rate" : "BR=", "self.power_intensity":"P=", "self.current_intensity_p":"CIP=", "self.light":"L="}
+        self.laser_properties = {"self.state":0, "self.mode":0, "self.current_mode" : 0, "self.burst_shots" : 0, "self.repetition_rate" : 0, "self.burst_rate" : 0, "self.current_intensity_p":0, "self.light":0}
+        self.laser_commands = {"self.state":"STA=", "self.mode":"QM=", "self.current_mode" : "CM=", "self.burst_shots" : "BR=", "self.repetition_rate" : "RR=", "self.burst_rate" : "generateur", "self.power_intensity":"P=", "self.current_intensity_p":"P=", "self.light":"L="}
         self.laser_properties_before = self.laser_properties
-#        print(self.serial_laser.write(b'>=1;?STA;'))
-#        self.laser_properties["self.state"] = self.serial_laser.readline() #enlever certaines infos
-#        self.serial_laser.write(b'CM=1;QM=0;BR=0;RR=0;CIP=0;L=0;') 
+        print(self.serial_laser.write(b'>=1;?STA;'))
+        self.laser_properties["self.state"] = self.serial_laser.readline() #enlever certaines infos
+        self.serial_laser.write(b'CM=0;QM=1;BR=0;RR=0;P=0;L=0;') 
         
 
    
@@ -57,20 +61,34 @@ class CommunicationLaser(threading.Thread):
         print("self.real_state = ",  self.serial_laser.readline() )
 #        
         pass
-#    def switch_light (self):   
-#        if :
-#        else =
+    def laser_switch_light (self):   
+        if self.laser_properties["self.light"] == 0 :
+            self.serial_laser.write(b'L=1;?L;')
+            print('L=00000000000000000000000000000000000000000000000000000000000000000000000àà;')
+            self.laser_properties["self.light"] = 1
+            self.inst.write("OUTPUT ON")
+            time.sleep(10)
+            print("self.light on = ",  self.serial_laser.readline() )
+            
+        else :
+            self.serial_laser.write(b'L=0;?L;')
+            self.laser_properties["self.light"] = 0
+            self.inst.write("OUTPUT OFF")
+            time.sleep(10)
+            print("self.light off = ",  self.serial_laser.readlin1e() )
         
 class ApplicationLaser(threading.Thread):
     
     def __init__(self, main_windows):    
         threading.Thread.__init__(self)
-        
         self.main_windows = main_windows
         self.communication_laser = CommunicationLaser(self)
         self.reglage_1 = ""
         
       
+        
+
+
         self.start()
         
     def run(self):
